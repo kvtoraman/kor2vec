@@ -1,14 +1,14 @@
 from gensim.models.keyedvectors import KeyedVectors
-from konlpy.tag import Twitter
+from konlpy.tag import Okt
 import argparse
 
 testset = "test_dataset/kor_analogy_semantic.txt"
-twitter = Twitter()
+okt = Okt()
 
 
 def analogy_test(testset, pos_vectors):
     correct, total, missed = 0, 0, 0
-    with open(testset, 'r') as lines:
+    with open(testset, 'r',encoding="utf-8") as lines:
         for line in lines:
             if line.startswith("#") or len(line) <= 1:
                 continue

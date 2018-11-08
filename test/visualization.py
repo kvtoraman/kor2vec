@@ -1,5 +1,5 @@
 from gensim.models.keyedvectors import KeyedVectors
-from konlpy.tag import Twitter
+from konlpy.tag import Okt
 import numpy as np
 import numpy.linalg as la
 import argparse
@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import sklearn.decomposition as decomposition
 import sys
 
-twitter = Twitter()
+okt = Okt()
 
 
 def normalize(array):
@@ -16,7 +16,7 @@ def normalize(array):
 
 
 def create_word_vector(word, pos_embeddings):
-    pos_list = twitter.pos(word, norm=True)
+    pos_list = okt.pos(word, norm=True)
     word_vector = np.sum([pos_vectors.word_vec(str(pos).replace(" ", "")) for pos in pos_list], axis=0)
     return normalize(word_vector)
 
@@ -49,7 +49,9 @@ if __name__ == "__main__":
         sys.exit()
 
     pos_vectors = KeyedVectors.load_word2vec_format(args.pos_file, binary=False)
-    words = args.words
+    words = ["밥","밥을","물","물을"]
+    
+    # words = args.words
     word_embeddings = list()
 
     for word in words:
