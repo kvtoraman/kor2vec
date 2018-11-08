@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import collections
-from konlpy.tag import Twitter
+from konlpy.tag import Okt
 import argparse
 import re
 import math
@@ -29,7 +29,7 @@ args = parser.parse_args()
 
 def build_dataset(train_text, min_count, sampling_rate):
     words = list()
-    with open(train_text, 'r') as f:
+    with open(train_text, 'r',encoding="utf-8") as f:
         lines = f.readlines()
         for line in lines:
             sentence = re.sub(r"[^ㄱ-힣a-zA-Z0-9]+", ' ', line).strip().split()
@@ -47,10 +47,10 @@ def build_dataset(train_text, min_count, sampling_rate):
 
     word_to_pos_li = dict()
     pos_list = list()
-    twitter = Twitter()
+    okt = Okt()
     for w in word_dict:
         w_pos_li = list()
-        for pos in twitter.pos(w, norm=True):
+        for pos in okt.pos(w, norm=True):
             w_pos_li.append(pos)
 
         word_to_pos_li[word_dict[w]] = w_pos_li
@@ -153,6 +153,8 @@ input_li_size = len(input_li)
 
 
 def generate_batch(iter, batch_size):
+    # print(input_li_size)
+    # print(batch_size)
     index = (iter % (input_li_size//batch_size)) * batch_size
     batch_input = input_li[index:index+batch_size]
     batch_output_li = output_li[index:index+batch_size]
@@ -217,7 +219,7 @@ with graph.as_default():
 
 # Function to save vectors.
 def save_model(pos_list, embeddings, file_name):
-    with open(file_name, 'w') as f:
+    with open(file_name, 'w',encoding="utf-8") as f:
         f.write(str(len(pos_list)))
         f.write(" ")
         f.write(str(embedding_size))

@@ -1,12 +1,12 @@
 from gensim.models.keyedvectors import KeyedVectors
 import numpy as np
 import numpy.linalg as la
-from konlpy.tag import Twitter
+from konlpy.tag import Okt
 import scipy.stats as st
 import argparse
 
 testset = "test_dataset/kor_ws353.csv"
-twitter = Twitter()
+okt = Okt()
 
 
 def normalize(array):
@@ -15,7 +15,7 @@ def normalize(array):
 
 
 def create_word_vector(word, pos_vectors):
-    pos_list = twitter.pos(word, norm=True)
+    pos_list = okt.pos(word, norm=True)
     word_vector = np.sum([pos_vectors.word_vec(str(pos).replace(" ", "")) for pos in pos_list], axis=0)
     return normalize(word_vector)
 
@@ -25,7 +25,7 @@ def word_sim_test(filename, pos_vectors):
     actual_sim_list, pred_sim_list = [], []
     missed = 0
 
-    with open(filename, 'r') as pairs:
+    with open(filename, 'r',encoding='utf-8') as pairs:
         for pair in pairs:
             w1, w2, actual_sim = pair.strip().split(delim)
 
